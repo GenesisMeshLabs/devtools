@@ -1,0 +1,30 @@
+name: Validate devtools
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ['3.12', '3.14']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Test workspace tooling
+        run: python -m unittest discover -s tests -v
+      - name: Compile scripts
+        run: python -m compileall -q bootstrap.py doctor.py runtests.py workspace.py tests
+      - name: Validate whitespace
+        run: git diff --check

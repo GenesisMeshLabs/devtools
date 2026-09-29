@@ -1,0 +1,55 @@
+{
+  "schema_version": 2,
+  "organization": "GenesisMeshLabs",
+  "default_profile": "core",
+  "profiles": {
+    "core": ["genesismesh", "gateway"],
+    "sdks": ["sdk-typescript", "sdk-go", "sdk-dotnet", "sdk-rust"],
+    "community": [".github", "devtools", "connectorzzz-dev", "genesismesh-content", "sandbox"],
+    "extras": ["site", "genesis-quantum-lab", "genesis-world-lab"]
+  },
+  "excluded_from_all": ["extras"],
+  "recipes": {
+    "genesismesh": {
+      "tools": {"python": "3.12"},
+      "install": [
+        ["{python}", "-m", "venv", ".venv"],
+        ["{venv_python}", "-m", "pip", "install", "-e", ".", "-r", "requirements.txt", "-r", "requirements-dev.txt"]
+      ],
+      "test": [["{venv_python}", "-m", "pytest", "genesis_mesh/tests", "-q", "-m", "not integration"]]
+    },
+    "gateway": {
+      "tools": {"rustc": "1.88", "cargo": null},
+      "install": [["cargo", "fetch", "--locked"]],
+      "test": [["cargo", "test", "--locked", "--all-targets"]]
+    },
+    "sdk-typescript": {
+      "tools": {"node": "22", "npm": null},
+      "install": [["npm", "ci"]],
+      "test": [["npm", "run", "build"], ["npm", "test"]]
+    },
+    "sdk-go": {
+      "tools": {"go": "1.22"},
+      "install": [["go", "mod", "download"]],
+      "test": [["go", "test", "./..."]]
+    },
+    "sdk-dotnet": {
+      "tools": {"dotnet": "8.0"},
+      "install": [["dotnet", "restore", "GenesisMesh.sln"]],
+      "test": [["dotnet", "test", "GenesisMesh.sln"]]
+    },
+    "sdk-rust": {
+      "tools": {"rustc": "1.85", "cargo": null},
+      "install": [["cargo", "fetch", "--locked"]],
+      "test": [["cargo", "test", "--locked", "--all-targets"]]
+    },
+    "devtools": {
+      "tools": {"python": "3.12"},
+      "test": [["{python}", "-m", "unittest", "discover", "-s", "tests", "-q"]]
+    },
+    "site": {
+      "tools": {"node": null, "npm": null},
+      "install": [["npm", "ci"]]
+    }
+  }
+}
