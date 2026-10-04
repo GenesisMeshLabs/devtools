@@ -6,7 +6,7 @@
     "core": ["genesismesh", "gateway"],
     "sdks": ["sdk-typescript", "sdk-go", "sdk-dotnet", "sdk-rust"],
     "community": [".github", "devtools", "connectorzzz-dev", "genesismesh-content", "sandbox"],
-    "extras": ["site", "genesis-quantum-lab", "genesis-world-lab"]
+    "extras": ["site", "genesismesh-web", "genesis-quantum-lab", "genesis-world-lab"]
   },
   "excluded_from_all": ["extras"],
   "recipes": {
@@ -50,6 +50,11 @@
     "site": {
       "tools": {"node": null, "npm": null},
       "install": [["npm", "ci"]]
+    },
+    "genesismesh-web": {
+      "tools": {"node": "20", "npm": null},
+      "install": [["npm", "ci"]],
+      "test": [["npm", "run", "lint"], ["npm", "run", "build"]]
     }
   }
 }

@@ -346,7 +346,7 @@ class WorkspaceTests(unittest.TestCase):
     def test_doctor_org_reports_drift(self):
         live = json.dumps([{"name": r["name"]} for r in self.manifest["repositories"]])
         with patch("doctor.run", return_value=subprocess.CompletedProcess([], 0, live)):
-            self.assertIn("all 14", doctor.organization_drift(self.manifest))
+            self.assertIn(f"all {len(self.manifest['repositories'])}", doctor.organization_drift(self.manifest))
         drifted = json.dumps([{"name": "new-repo"}, *json.loads(live)[1:]])
         with patch("doctor.run", return_value=subprocess.CompletedProcess([], 0, drifted)):
             with self.assertRaisesRegex(ValueError, "missing from repos.json: new-repo.*not found on GitHub.*genesismesh"):
