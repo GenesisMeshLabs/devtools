@@ -88,12 +88,13 @@
     },
     {
       "customType": "regex",
-      "description": "A release's commit, written as \"<sha>\"  # GenesisMeshLabs/<repo> vX.Y.Z: the tag and its commit move together.",
+      "description": "A release's commit, written as \"<sha>\"  # GenesisMeshLabs/<repo> vX.Y.Z, or as \"vX.Y.Z\"  # GenesisMeshLabs/<repo> with the commit on the next line: the tag and its commit move together.",
       "managerFilePatterns": [
         "/\\.(py|ya?ml|sh)$/"
       ],
       "matchStrings": [
-        "\"(?<currentDigest>[0-9a-f]{40})\"\\s*#\\s*(?<depName>GenesisMeshLabs/[A-Za-z0-9_-]+) (?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+        "\"(?<currentDigest>[0-9a-f]{40})\"\\s*#\\s*(?<depName>GenesisMeshLabs/[A-Za-z0-9_-]+) (?<currentValue>v\\d+\\.\\d+\\.\\d+)",
+        "\"(?<currentValue>v\\d+\\.\\d+\\.\\d+)\"\\s*#\\s*(?<depName>GenesisMeshLabs/[A-Za-z0-9_-]+)[ \\t]*\\r?\\n[^\\n]*\"(?<currentDigest>[0-9a-f]{40})\""
       ],
       "datasourceTemplate": "github-tags"
     }

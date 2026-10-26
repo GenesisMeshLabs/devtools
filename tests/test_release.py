@@ -326,6 +326,21 @@ class RenovatePresetTests(unittest.TestCase):
             "depName": "GenesisMeshLabs/genesismesh", "currentValue": "v1.8.1"})
         self.assertIn("GenesisMeshLabs/genesismesh", self.preset["packageRules"][1]["matchPackageNames"])
 
+    def test_a_release_constant_with_its_commit_on_the_next_line(self):
+        pins = self.manager("A release's commit")
+        two_lines = self.python_regex(pins["matchStrings"][1])
+        text = ('CORE_RELEASE = "v1.8.1"  # GenesisMeshLabs/genesismesh\n'
+                'CORE_REVISION = "9e4d5c01e6ba7a22e73c17388796ec274f73a2fc"\n'
+                'SDK_RELEASE = "v1.8.1"  # GenesisMeshLabs/sdk-rust\r\n'
+                'SDK_REVISION = "e554ca482a3ef4bc1e7a2ef205ac1d537daa169d"\n')
+        found = [m.groupdict() for m in two_lines.finditer(text)]
+        self.assertEqual(found, [
+            {"currentValue": "v1.8.1", "depName": "GenesisMeshLabs/genesismesh",
+             "currentDigest": "9e4d5c01e6ba7a22e73c17388796ec274f73a2fc"},
+            {"currentValue": "v1.8.1", "depName": "GenesisMeshLabs/sdk-rust",
+             "currentDigest": "e554ca482a3ef4bc1e7a2ef205ac1d537daa169d"},
+        ])
+
 
 if __name__ == "__main__":
     unittest.main()
