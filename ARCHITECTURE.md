@@ -62,9 +62,11 @@ flowchart LR
 - **The gateway reads a sibling checkout.** `gateway/tests/reference/build_service_catalog.py`
   reads `../genesismesh` to regenerate the allowlisted operation catalog. This is one
   reason devtools clones all projects side by side.
-- **Releases are coordinated.** genesismesh and the SDKs share one product version per
-  release train, and packages publish only after every component's release gate passes.
-  The gateway is versioned on its own.
+- **Releases are coordinated.** genesismesh, the four SDKs and the gateway share one
+  product version per release train; the core leads. `devtools/release.py` opens the
+  release pull requests and pushes the tags in all six at once, and Renovate
+  (`renovate/genesis-mesh.json`) moves every repository that pins a release to the
+  new version.
 
 ## Where a change goes
 

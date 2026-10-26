@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "organization": "GenesisMeshLabs",
+  "core": "genesismesh",
+  "train": [
+    {
+      "repo": "genesismesh",
+      "sites": [
+        {"file": "VERSION", "pattern": "\\A(\\d+\\.\\d+\\.\\d+)", "count": 1}
+      ],
+      "set_version": [["{python}", "scripts/check_version.py", "--set", "{version}"]],
+      "changelog_heading": "## v{version} - {title}",
+      "no_change_entry": null,
+      "fold": [
+        {"command": ["{python}", "scripts/upgrade_notes.py", "release", "{version}"], "when": "upgrade.d/{version}"}
+      ],
+      "check": [["{python}", "scripts/check_version.py"]],
+      "tag_message": "Genesis Mesh {version} - {title}"
+    },
+    {
+      "repo": "sdk-typescript",
+      "sites": [
+        {"file": "VERSION", "pattern": "\\A(\\d+\\.\\d+\\.\\d+)", "count": 1},
+        {"file": "package.json", "pattern": "\"name\": \"genesis-mesh-sdk\",\\s*\"version\": \"(\\d+\\.\\d+\\.\\d+)\"", "count": 1},
+        {"file": "package-lock.json", "pattern": "\"name\": \"genesis-mesh-sdk\",\\s*\"version\": \"(\\d+\\.\\d+\\.\\d+)\"", "count": 2}
+      ],
+      "changelog_heading": "## [{version}] - {date}",
+      "no_change_entry": "Released with Genesis Mesh {version}. Nothing changes in this SDK.",
+      "fold": [],
+      "check": [["node", "scripts/check-version.mjs"]],
+      "tag_message": "sdk-typescript {version}"
+    },
+    {
+      "repo": "sdk-go",
+      "sites": [
+        {"file": "VERSION", "pattern": "\\A(\\d+\\.\\d+\\.\\d+)", "count": 1}
+      ],
+      "changelog_heading": "## [{version}] - {date}",
+      "no_change_entry": "Released with Genesis Mesh {version}. Nothing changes in this SDK.",
+      "fold": [],
+      "check": [],
+      "tag_message": "sdk-go {version}"
+    },
+    {
+      "repo": "sdk-dotnet",
+      "sites": [
+        {"file": "VERSION", "pattern": "\\A(\\d+\\.\\d+\\.\\d+)", "count": 1},
+        {"file": "src/GenesisMesh.Sdk/GenesisMesh.Sdk.csproj", "pattern": "<Version>(\\d+\\.\\d+\\.\\d+)</Version>", "count": 1}
+      ],
+      "changelog_heading": "## [{version}] - {date}",
+      "no_change_entry": "Released with Genesis Mesh {version}. Nothing changes in this SDK.",
+      "fold": [],
+      "check": [],
+      "tag_message": "sdk-dotnet {version}"
+    },
+    {
+      "repo": "sdk-rust",
+      "sites": [
+        {"file": "VERSION", "pattern": "\\A(\\d+\\.\\d+\\.\\d+)", "count": 1},
+        {"file": "Cargo.toml", "pattern": "name = \"genesis-mesh-sdk\"\\s*version = \"(\\d+\\.\\d+\\.\\d+)\"", "count": 1},
+        {"file": "edge/Cargo.toml", "pattern": "name = \"genesis-mesh-edge\"\\s*(?:#[^\\n]*\\n\\s*)*version = \"(\\d+\\.\\d+\\.\\d+)\"", "count": 1},
+        {"file": "verifier/Cargo.toml", "pattern": "name = \"genesis-mesh-verify\"\\s*(?:#[^\\n]*\\n\\s*)*version = \"(\\d+\\.\\d+\\.\\d+)\"", "count": 1},
+        {"file": "Cargo.lock", "pattern": "name = \"genesis-mesh-(?:sdk|edge|verify)\"\\s*version = \"(\\d+\\.\\d+\\.\\d+)\"", "count": 3}
+      ],
+      "changelog_heading": "## {version} - {date}",
+      "no_change_entry": "Released with Genesis Mesh {version}. Nothing changes in this SDK, the verifier or the edge agent.",
+      "fold": [],
+      "check": [["{python}", "scripts/check_release.py"]],
+      "tag_message": "sdk-rust {version}"
+    },
+    {
+      "repo": "gateway",
+      "sites": [
+        {"file": "Cargo.toml", "pattern": "name = \"genesis-mesh-gateway\"\\s*version = \"(\\d+\\.\\d+\\.\\d+)\"", "count": 1},
+        {"file": "Cargo.lock", "pattern": "name = \"genesis-mesh-gateway\"\\s*version = \"(\\d+\\.\\d+\\.\\d+)\"", "count": 1},
+        {"file": "ui/openapi.json", "pattern": "\"title\": \"Genesis Mesh Trust Gateway\",\\s*\"version\": \"(\\d+\\.\\d+\\.\\d+)\"", "count": 1}
+      ],
+      "changelog_heading": null,
+      "no_change_entry": null,
+      "fold": [],
+      "check": [],
+      "tag_message": "Genesis Mesh Gateway {version}"
+    }
+  ]
+}
