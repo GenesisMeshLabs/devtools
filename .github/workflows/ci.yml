@@ -25,6 +25,6 @@ jobs:
       - name: Test workspace tooling
         run: python -m unittest discover -s tests -v
       - name: Compile scripts
-        run: python -m compileall -q bootstrap.py doctor.py runtests.py workspace.py tests
+        run: python -m compileall -q bootstrap.py doctor.py release.py runtests.py workspace.py tests
       - name: Validate whitespace
         run: git diff --check

@@ -84,6 +84,39 @@ python3 devtools/bootstrap.py --all --git-name "Your Name" --git-email you@examp
 `--github-user` picks the HTTPS credential username; it does not log you in. Global Git
 settings and existing commits are never changed.
 
+## Release Genesis Mesh
+
+The six release-train repositories (genesismesh, the four SDKs, gateway) share
+one version, and the core leads (genesismesh `docs/development/versioning.md`).
+`release.py` cuts a release in all of them at once, from the declarations in
+[release.json](release.json):
+
+```sh
+python3 release.py check                                 # the version each checkout declares
+python3 release.py prepare 1.9.0 --title "The Name" --dry-run
+python3 release.py prepare 1.9.0 --title "The Name"      # one release/1.9.0 PR per repository
+python3 release.py tag 1.9.0 --dry-run                   # after the PRs are merged, core first
+python3 release.py tag 1.9.0                             # sign and push v1.9.0, publish the core release
+python3 release.py status 1.9.0                          # PRs, tags and publish runs
+```
+
+`prepare` writes the version everywhere each repository declares it (the core
+uses its own `scripts/check_version.py --set`), folds the changelog fragments
+(a component without any gets the "Nothing changes in this SDK" entry), runs
+the repository's version check and opens the pull request. The core's PR still
+needs its release narrative before it merges. `tag` refuses until every main
+declares the version, signs the tags with your Git signing key, pushes them,
+the core first, and creates the core's GitHub release, which publishes it to
+PyPI and GHCR; the components publish from their tags. Both work in fresh
+clones in a temporary directory and never touch your checkouts.
+
+Repositories that pin a release (genesismesh-mcp, genesismesh-radio,
+genesismesh-connect, the Backstage plugin, sandbox, the websites, the .NET
+API baseline) extend [renovate/genesis-mesh.json](renovate/genesis-mesh.json)
+in their `renovate.json`. When a release is published, Renovate opens one
+"Update Genesis Mesh" pull request in each of them; it manages nothing else.
+The Renovate GitHub app must be installed for those repositories.
+
 ## Agent guidance
 
 [AGENT.md](AGENT.md) holds shared, vendor-neutral guidance for coding agents.

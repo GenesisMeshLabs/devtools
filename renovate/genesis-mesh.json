@@ -1,0 +1,101 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Genesis Mesh releases only: when the release train publishes a version, one pull request per repository moves every pin to it. Extend it with \"github>GenesisMeshLabs/devtools//renovate/genesis-mesh\".",
+  "dependencyDashboard": false,
+  "platformCommit": "enabled",
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "packageRules": [
+    {
+      "description": "Nothing but Genesis Mesh: each repository keeps its own process for other dependencies.",
+      "matchPackageNames": [
+        "*"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Every Genesis Mesh package and release, in one pull request.",
+      "matchPackageNames": [
+        "genesis-mesh",
+        "genesis-mesh-sdk",
+        "genesismesh-sdk-dotnet",
+        "github.com/GenesisMeshLabs/sdk-go",
+        "GenesisMeshLabs/genesismesh",
+        "GenesisMeshLabs/sdk-rust",
+        "GenesisMeshLabs/gateway",
+        "ghcr.io/genesismeshlabs/genesis-mesh",
+        "ghcr.io/genesismeshlabs/genesis-mesh-gateway",
+        "ghcr.io/genesismeshlabs/genesis-mesh-edge"
+      ],
+      "enabled": true,
+      "groupName": "Genesis Mesh",
+      "groupSlug": "genesis-mesh",
+      "separateMajorMinor": false,
+      "postUpdateOptions": [
+        "gomodTidy"
+      ]
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "pip install genesis-mesh==X.Y.Z in documentation and scripts (pyproject.toml and requirements files have their own managers).",
+      "managerFilePatterns": [
+        "/\\.(md|mjs|cjs|js|ts|sh|ps1|py|ya?ml)$/"
+      ],
+      "matchStrings": [
+        "genesis-mesh==(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "genesis-mesh",
+      "datasourceTemplate": "pypi"
+    },
+    {
+      "customType": "regex",
+      "description": "The Rust SDK as a Git dependency pinned to a release tag (cargo refreshes Cargo.lock on the next build).",
+      "managerFilePatterns": [
+        "/(^|/)Cargo\\.toml$/"
+      ],
+      "matchStrings": [
+        "github\\.com/GenesisMeshLabs/sdk-rust\"\\s*,\\s*tag\\s*=\\s*\"(?<currentValue>v\\d+\\.\\d+\\.\\d+)\""
+      ],
+      "depNameTemplate": "GenesisMeshLabs/sdk-rust",
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "description": "A .NET SDK version in an MSBuild property: a test's package version, or the API baseline once NuGet has the release.",
+      "managerFilePatterns": [
+        "/\\.(cs|fs|vb)proj$/",
+        "/\\.(props|targets)$/"
+      ],
+      "matchStrings": [
+        "<(?:GmSdkDotnetVersion|PackageValidationBaselineVersion)[^>]*>(?<currentValue>\\d+\\.\\d+\\.\\d+)</"
+      ],
+      "depNameTemplate": "genesismesh-sdk-dotnet",
+      "datasourceTemplate": "nuget"
+    },
+    {
+      "customType": "regex",
+      "description": "The release a website's generated facts name: the pull request rebuilds the site with the new release.",
+      "managerFilePatterns": [
+        "/(^|/)src/generated/release\\.json$/"
+      ],
+      "matchStrings": [
+        "\"version\":\\s*\"(?<currentValue>\\d+\\.\\d+\\.\\d+)\""
+      ],
+      "depNameTemplate": "genesis-mesh",
+      "datasourceTemplate": "pypi"
+    },
+    {
+      "customType": "regex",
+      "description": "A release's commit, written as \"<sha>\"  # GenesisMeshLabs/<repo> vX.Y.Z: the tag and its commit move together.",
+      "managerFilePatterns": [
+        "/\\.(py|ya?ml|sh)$/"
+      ],
+      "matchStrings": [
+        "\"(?<currentDigest>[0-9a-f]{40})\"\\s*#\\s*(?<depName>GenesisMeshLabs/[A-Za-z0-9_-]+) (?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "github-tags"
+    }
+  ]
+}

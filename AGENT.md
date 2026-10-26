@@ -31,8 +31,11 @@ permissions to an agent. Configure your chosen agent to read AGENT.md.
 Read README.md before changing this repository. Only the marked shared section above
 is distributed by `bootstrap.py --agents`.
 
-This repository owns local developer setup for GenesisMeshLabs. Product code,
-runtime dependencies, and project release policies belong in their own repositories.
+This repository owns local developer setup for GenesisMeshLabs and the tooling that
+cuts a coordinated release across the release train (release.py, release.json) and
+propagates it (renovate/genesis-mesh.json). Product code, runtime dependencies, and
+project release policies belong in their own repositories: release.py follows the
+core's versioning policy and calls each repository's own scripts.
 
 - Keep the tools standard-library-only and compatible with Python 3.12 or later.
 - Support macOS, Linux, and Windows using pathlib and argument-list subprocess calls.
@@ -42,6 +45,10 @@ runtime dependencies, and project release policies belong in their own repositor
   settings, VS Code workspace files, and AGENT.md updates require explicit options.
 - A dry run must not write files, clone repositories, install packages, or change Git configuration.
 - Never print credential-helper output, access tokens, or environment secrets.
+- release.py works only in fresh clones in a temporary directory; it never touches the
+  workspace checkouts. A repository's version declarations live in release.json and
+  must match its own version check; tags and the core's GitHub release are created only
+  by `release.py tag`, after the Maintainer merged the release pull requests.
 - Keep repo selection (profiles) and install/test recipes in repos.json. Check upstream
   manifests and CI before changing a minimum version or command.
 - Keep agent guidance vendor-neutral. Use AGENT.md only; no dedicated agent configuration.
