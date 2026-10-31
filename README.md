@@ -53,7 +53,7 @@ python3 devtools/doctor.py --all --json
 | `core` | [genesismesh](https://github.com/GenesisMeshLabs/genesismesh), [gateway](https://github.com/GenesisMeshLabs/gateway) |
 | `sdks` | [sdk-typescript](https://github.com/GenesisMeshLabs/sdk-typescript), [sdk-go](https://github.com/GenesisMeshLabs/sdk-go), [sdk-dotnet](https://github.com/GenesisMeshLabs/sdk-dotnet), [sdk-rust](https://github.com/GenesisMeshLabs/sdk-rust) |
 | `community` | [.github](https://github.com/GenesisMeshLabs/.github), [devtools](https://github.com/GenesisMeshLabs/devtools), [connectorzzz-dev](https://github.com/GenesisMeshLabs/connectorzzz-dev), [genesismesh-content](https://github.com/GenesisMeshLabs/genesismesh-content), [sandbox](https://github.com/GenesisMeshLabs/sandbox) (private) |
-| `extras` | [site](https://github.com/GenesisMeshLabs/site), [genesis-quantum-lab](https://github.com/GenesisMeshLabs/genesis-quantum-lab), [genesis-world-lab](https://github.com/GenesisMeshLabs/genesis-world-lab) |
+| `extras` | [site](https://github.com/GenesisMeshLabs/site), [genesismesh-web](https://github.com/GenesisMeshLabs/genesismesh-web), [genesis-quantum-lab](https://github.com/GenesisMeshLabs/genesis-quantum-lab), [genesis-world-lab](https://github.com/GenesisMeshLabs/genesis-world-lab) |
 
 `--all` selects every profile except `extras`; use `--profile extras` to clone those too.
 Run `doctor.py --org` to find repositories created on GitHub but not yet added to
